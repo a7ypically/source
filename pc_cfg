@@ -108,6 +108,7 @@ CONFIG_PACKAGE_dnsmasq_full_dhcpv6=y
 CONFIG_PACKAGE_dnsmasq_full_dnssec=y
 CONFIG_PACKAGE_dnsmasq_full_ipset=y
 CONFIG_PACKAGE_dnsmasq_full_noid=y
+CONFIG_PACKAGE_dnswhisperer=y
 CONFIG_PACKAGE_dropbearconvert=y
 CONFIG_PACKAGE_fdisk=y
 CONFIG_PACKAGE_ffmpeg=y

@@ -157,4 +157,8 @@ config LIBCURL_NTLM
 	depends on LIBCURL_CRYPTO_AUTH && !LIBCURL_NOSSL
 	default n
 
+config LIBCURL_NGHTTP2
+    bool "Enable HTTP/2 support"
+    default n
+
 endif

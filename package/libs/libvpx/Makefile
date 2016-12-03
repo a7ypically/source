@@ -47,6 +47,7 @@ CONFIGURE_ARGS = \
 		--libdir=/usr/lib \
 		--enable-static \
 		--enable-shared \
+		--as=yasm \
         --disable-examples \
         --disable-docs \
         --disable-unit-tests \
@@ -61,9 +62,11 @@ endif
 CONFIGURE_VARS += \
     CROSS=$(GNU_TARGET_NAME) \
 	LD="$(TARGET_CC)" \
+	AS=yasm \
 
 MAKE_FLAGS += \
 	LD="$(TARGET_CC)" \
+	AS=yasm \
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/vpx/

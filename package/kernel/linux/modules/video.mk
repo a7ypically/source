@@ -380,7 +380,6 @@ endef
 
 $(eval $(call KernelPackage,video-pwc))
 
-
 define KernelPackage/video-uvc
   TITLE:=USB Video Class (UVC) support
   DEPENDS:=@USB_SUPPORT +kmod-usb-core +kmod-video-videobuf2 +kmod-input-core
@@ -396,6 +395,20 @@ endef
 
 $(eval $(call KernelPackage,video-uvc))
 
+define KernelPackage/video-usbtv
+  TITLE:=USB TV support
+  DEPENDS:=@USB_SUPPORT +kmod-usb-core +kmod-video-videobuf2 +kmod-input-core +kmod-sound-core
+  KCONFIG:= CONFIG_VIDEO_USBTV
+  FILES:=$(LINUX_DIR)/drivers/media/usb/usbtv/usbtv.ko
+  AUTOLOAD:=$(call AutoProbe,usbtv)
+  $(call AddDepends/camera)
+endef
+
+define KernelPackage/video-usbtv/description
+ Kernel modules for supporting USB TV devices
+endef
+
+$(eval $(call KernelPackage,video-usbtv))
 
 define KernelPackage/video-gspca-core
   MENU:=1

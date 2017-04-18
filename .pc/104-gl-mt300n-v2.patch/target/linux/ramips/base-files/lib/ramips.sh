@@ -112,9 +112,6 @@ ramips_board_detect() {
 	*"D105")
 		name="d105"
 		;;
-	*"D240")
-		name="d240"
-		;;
 	*"DAP-1350")
 		name="dap-1350"
 		;;
@@ -210,9 +207,6 @@ ramips_board_detect() {
 		;;
 	*"GL-MT300N")
 		name="gl-mt300n"
-		;;
-	*"GL-MT300N-V2")
-		name="gl-mt300n-v2"
 		;;
 	*"GL-MT750")
 		name="gl-mt750"
@@ -558,9 +552,6 @@ ramips_board_detect() {
 		;;
 	*"WMR-300")
 		name="wmr-300"
-		;;
-	*"WN3000RPv3")
-		name="wn3000rpv3"
 		;;
 	*"WNCE2001")
 		name="wnce2001"

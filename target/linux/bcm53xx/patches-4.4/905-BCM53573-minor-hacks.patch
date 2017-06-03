@@ -11,22 +11,10 @@ Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
 
 --- a/arch/arm/boot/dts/bcm53573.dtsi
 +++ b/arch/arm/boot/dts/bcm53573.dtsi
-@@ -44,6 +44,27 @@
+@@ -48,6 +48,15 @@
  		};
  	};
  
-+	pmu@18012000 {
-+		compatible = "simple-mfd", "syscon";
-+		reg = <0x18012000 0x00001000>;
-+
-+		ilp: ilp {
-+			compatible = "brcm,bcm53573-ilp";
-+			clocks = <&alp>;
-+			#clock-cells = <0>;
-+			clock-output-names = "ilp";
-+		};
-+	};
-+
 +	timer {
 +		compatible = "arm,armv7-timer";
 +		interrupts = <GIC_PPI 13 0>,
@@ -41,7 +29,7 @@ Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
  		#size-cells = <1>;
 --- a/drivers/bcma/main.c
 +++ b/drivers/bcma/main.c
-@@ -349,14 +349,6 @@ static int bcma_register_devices(struct
+@@ -348,14 +348,6 @@ static int bcma_register_devices(struct
  	}
  #endif
  
@@ -56,7 +44,7 @@ Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
  #ifdef CONFIG_BCMA_NFLASH
  	if (bus->drv_cc.nflash.present) {
  		err = platform_device_register(&bcma_nflash_dev);
-@@ -437,6 +429,14 @@ int bcma_bus_register(struct bcma_bus *b
+@@ -436,6 +428,14 @@ int bcma_bus_register(struct bcma_bus *b
  			bcma_register_core(bus, core);
  	}
  

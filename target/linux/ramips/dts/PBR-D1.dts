@@ -43,10 +43,10 @@
 		#size-cells = <0>;
 		poll-interval = <20>;
 
-		wps {
+		reset {
 			label = "reset";
 			gpios = <&gpio1 38 1>;
-			linux,code = <KEY_WPS_BUTTON>;
+			linux,code = <KEY_RESTART>;
 		};
 	};
 
@@ -99,7 +99,6 @@
 		#size-cells = <1>;
 		compatible = "jedec,spi-nor";
 		reg = <0>;
-		linux,modalias = "m25p80", "w25q128";
 		spi-max-frequency = <40000000>;
 		m25p,chunked-io = <31>;
 

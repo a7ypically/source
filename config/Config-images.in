@@ -201,8 +201,12 @@ menu "Target Images"
 		int "Serial port baud rate"
 		depends on GRUB_IMAGES
 		default 38400 if TARGET_x86_generic
-		default 38400 if TARGET_x86_geode
 		default 115200
+
+	config GRUB_FLOWCONTROL
+		bool "Use RTE/CTS on serial console"
+		depends on GRUB_SERIAL != ""
+		default n
 
 	config GRUB_BOOTOPTS
 		string "Extra kernel boot options"
@@ -253,8 +257,7 @@ menu "Target Images"
 	config TARGET_ROOTFS_PARTSIZE
 		int "Root filesystem partition size (in MB)"
 		depends on GRUB_IMAGES || TARGET_ROOTFS_EXT4FS || TARGET_rb532 || TARGET_mvebu || TARGET_uml
-		default 2048 if TARGET_x86
-		default 256 if ! TARGET_x86
+		default 256
 		help
 		  Select the root filesystem partition size.
 

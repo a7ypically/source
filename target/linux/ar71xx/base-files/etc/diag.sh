@@ -8,6 +8,12 @@ get_status_led() {
 	local board=$(ar71xx_board_name)
 
 	case $board in
+	a40)
+		status_led="a40:green:status"
+		;;
+	a60)
+		status_led="a60:green:status"
+		;;
 	alfa-nx)
 		status_led="alfa:green:led_8"
 		;;
@@ -18,11 +24,15 @@ get_status_led() {
 	antminer-s3|\
 	antminer-r1|\
 	minibox-v1|\
-	som9331)
+	som9331|\
+	sr3200|\
+	tl-wr802n-v2|\
+	xd3200)
 		status_led="$board:green:system"
 		;;
 	ap132|\
-	ap81|\
+	ap531b0|\
+	cpe505n|\
 	db120|\
 	dr344|\
 	tew-632brp|\
@@ -40,17 +50,22 @@ get_status_led() {
 	ap135-020)
 		status_led="ap135:green:status"
 		;;
-	ap83|\
+	archer-c59-v1|\
+	archer-c60-v1|\
 	mr12|\
 	mr16|\
 	nbg6616|\
+	sc1750|\
+	sc450|\
 	tl-wpa8630)
 		status_led="$board:green:power"
 		;;
 	ap90q|\
 	cpe830|\
 	cpe870|\
-	gl-inet)
+	gl-inet|\
+	gl-mifi|\
+	gl-ar300m)
 		status_led="$board:green:lan"
 		;;
 	ap96)
@@ -160,6 +175,9 @@ get_status_led() {
 	eap300v2)
 		status_led="engenius:blue:power"
 		;;
+	ens202ext)
+		status_led="engenius:amber:power"
+		;;
 	eap7660d)
 		status_led="$board:green:ds4"
 		;;
@@ -180,6 +198,10 @@ get_status_led() {
 		;;
 	esr900)
 		status_led="engenius:amber:power"
+		;;
+	hiveap-121|\
+	nbg6716)
+		status_led="$board:white:power"
 		;;
 	hiwifi-hc6361)
 		status_led="hiwifi:blue:system"
@@ -233,14 +255,13 @@ get_status_led() {
 	nbg460n_550n_550nh)
 		status_led="nbg460n:green:power"
 		;;
-	nbg6716)
-		status_led="$board:white:power"
-		;;
 	om2p|\
 	om2pv2|\
+	om2pv4|\
 	om2p-hs|\
 	om2p-hsv2|\
 	om2p-hsv3|\
+	om2p-hsv4|\
 	om2p-lc)
 		status_led="om2p:blue:power"
 		;;
@@ -264,6 +285,10 @@ get_status_led() {
 	pb44)
 		status_led="$board:amber:jump1"
 		;;
+	r602n)
+		status_led="$board:green:wan"
+		;;
+	rb-2011il|\
 	rb-2011l|\
 	rb-2011uas|\
 	rb-2011uas-2hnd)
@@ -281,11 +306,19 @@ get_status_led() {
 	rb-750)
 		status_led="rb750:green:act"
 		;;
+	rb-750-r2|\
+	rb-750up-r2|\
 	rb-911g-2hpnd|\
 	rb-911g-5hpacd|\
 	rb-911g-5hpnd|\
 	rb-912uag-2hpnd|\
-	rb-912uag-5hpnd)
+	rb-912uag-5hpnd|\
+	rb-941-2nd|\
+	rb-951ui-2nd|\
+	rb-952ui-5ac2nd|\
+	rb-962uigs-5hact2hnt|\
+	rb-lhg-5nd|\
+	rb-mapl-2nd)
 		status_led="rb:green:user"
 		;;
 	rb-951ui-2hnd)
@@ -294,6 +327,10 @@ get_status_led() {
 	rb-sxt2n|\
 	rb-sxt5n)
 		status_led="rb:green:power"
+		;;
+	re450|\
+	sc300m)
+		status_led="$board:blue:power"
 		;;
 	routerstation|\
 	routerstation-pro)
@@ -325,11 +362,15 @@ get_status_led() {
 	tl-wa750re)
 		status_led="tp-link:orange:re"
 		;;
-	tl-wa850re)
+	tl-wa850re|\
+	tl-wa850re-v2)
 		status_led="tp-link:blue:re"
 		;;
 	tl-wa860re)
 		status_led="tp-link:green:power"
+		;;
+	tl-mr6400)
+		status_led="tp-link:white:power"
 		;;
 	tl-mr3220|\
 	tl-mr3220-v2|\
@@ -346,8 +387,13 @@ get_status_led() {
 	tl-wr1041n-v2|\
 	tl-wr1043nd|\
 	tl-wr1043nd-v2|\
+	tl-wr1043nd-v4|\
+	tl-wr740n-v6|\
 	tl-wr741nd|\
 	tl-wr741nd-v4|\
+	tl-wa801nd-v3|\
+	tl-wr840n-v2|\
+	tl-wr840n-v3|\
 	tl-wr841n-v1|\
 	tl-wr841n-v7|\
 	tl-wr841n-v8|\
@@ -371,6 +417,7 @@ get_status_led() {
 	tl-wr720n-v3|\
 	tl-wr802n-v1|\
 	tl-wr810n|\
+	tl-wr940n-v4|\
 	tl-wr941nd-v6)
 		status_led="tp-link:blue:system"
 		;;
@@ -430,6 +477,9 @@ get_status_led() {
 	wpj531|\
 	wpj558)
 		status_led="$board:green:sig3"
+		;;
+	wpj563)
+		status_led="$board:green:sig1"
 		;;
 	wrt400n|\
 	wrt160nl)

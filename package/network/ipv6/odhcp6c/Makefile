@@ -8,20 +8,21 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=odhcp6c
-PKG_VERSION:=2016-06-30
-PKG_RELEASE=$(PKG_SOURCE_VERSION)
+PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
-PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE_URL:=https://github.com/sbyx/odhcp6c.git
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE_VERSION:=7533a6243dc3ac5a747cf6ccbc4d0539dafd3e07
-PKG_MIRROR_MD5SUM:=faaa26d09039c3133626f67a01b07b9922fea105e6566c44e78350fce51fa2b8
-PKG_MAINTAINER:=Steven Barth <steven@midlink.org>
+PKG_SOURCE_URL=$(LEDE_GIT)/project/odhcp6c.git
+PKG_SOURCE_DATE:=2017-03-22
+PKG_SOURCE_VERSION:=0463b0571af90fbab2bfc75d3338d6bf503dc0fb
+PKG_MIRROR_HASH:=42c500f6d7839fadcc29cd939ebea1b468be69616af160f9a2b82507bcd39520
+PKG_MAINTAINER:=Hans Dedecker <dedeckeh@gmail.com>
 PKG_LICENSE:=GPL-2.0
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/cmake.mk
+
+CMAKE_OPTIONS += \
+	-DUSE_LIBUBOX=on
 
 ifneq ($(CONFIG_PACKAGE_odhcp6c_ext_cer_id),0)
   CMAKE_OPTIONS += -DEXT_CER_ID=$(CONFIG_PACKAGE_odhcp6c_ext_cer_id)
@@ -31,7 +32,7 @@ define Package/odhcp6c
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Embedded DHCPv6-client for OpenWrt
-  DEPENDS:=@IPV6
+  DEPENDS:=@IPV6 +libubox
 endef
 
 define Package/odhcp6c/config

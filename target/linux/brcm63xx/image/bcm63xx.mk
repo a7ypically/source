@@ -200,6 +200,18 @@ define Device/A4001N1
 endef
 TARGET_DEVICES += A4001N1
 
+define Device/AV4202N
+  $(Device/bcm63xx)
+  IMAGE_OFFSET := 0x20000
+  DEVICE_TITLE := ADB P.DG AV4202N
+  DEVICE_DTS := av4202n
+  CFE_BOARD_ID := 96368_Swiss_S1
+  CFE_CHIP_ID := 6368
+  DEVICE_PACKAGES := \
+    $(USB2_PACKAGES) $(B43_PACKAGES)
+endef
+TARGET_DEVICES += AV4202N
+
 ### Alcatel ###
 define Device/RG100A
   $(Device/bcm63xx)
@@ -217,7 +229,7 @@ TARGET_DEVICES += RG100A
 define Device/AR1004G
   $(Device/bcm63xx)
   DEVICE_TITLE := Asmax AR 1004g
-  DEVICE_DTS := rg100a
+  DEVICE_DTS := ar1004g
   CFE_BOARD_ID := 96348GW-10
   CFE_CHIP_ID := 6348
   DEVICE_PACKAGES := \
@@ -806,6 +818,21 @@ define Device/R5010UNv2
 endef
 TARGET_DEVICES += R5010UNv2
 
+### Observa ###
+define Device/VH4032N
+  $(Device/bcm63xx)
+  IMAGES += sysupgrade.bin
+  DEVICE_TITLE := Observa VH4032N
+  DEVICE_DTS := vh4032n
+  CFE_BOARD_ID := 96368VVW
+  CFE_CHIP_ID := 6368
+  BLOCK_SIZE := 0x20000
+  FLASH_MB := 32
+  DEVICE_PACKAGES := \
+    $(B43_PACKAGES) $(USB2_PACKAGES)
+endef
+TARGET_DEVICES += VH4032N
+
 ### Pirelli ###
 define Device/A226G
   $(Device/bcm63xx)
@@ -922,7 +949,7 @@ define Device/NEUFBOX4-SER
   DEVICE_DTS := nb4-ser-r0
   CFE_BOARD_ID := 96358VW
   CFE_CHIP_ID := 6358
-  CFE_EXTRAS += --rsa-signature "LEDE-$(REVISION)"
+  CFE_EXTRAS += --rsa-signature "LEDE-$(firstword $(subst -,$(space),$(REVISION)))"
   DEVICE_PACKAGES := \
     $(B43_PACKAGES) $(USB2_PACKAGES)
 endef
@@ -934,7 +961,7 @@ define Device/NEUFBOX4-FXC
   DEVICE_DTS := nb4-fxc-r1
   CFE_BOARD_ID := 96358VW
   CFE_CHIP_ID := 6358
-  CFE_EXTRAS += --rsa-signature "LEDE-$(REVISION)"
+  CFE_EXTRAS += --rsa-signature "LEDE-$(firstword $(subst -,$(space),$(REVISION)))"
   DEVICE_PACKAGES := \
     $(B43_PACKAGES) $(USB2_PACKAGES)
 endef
@@ -946,7 +973,7 @@ define Device/NEUFBOX6
   DEVICE_DTS := nb6-ser-r0
   CFE_BOARD_ID := NB6-SER-r0
   CFE_CHIP_ID := 6362
-  CFE_EXTRAS += --rsa-signature "LEDE-$(REVISION)"
+  CFE_EXTRAS += --rsa-signature "LEDE-$(firstword $(subst -,$(space),$(REVISION)))"
   DEVICE_PACKAGES := \
     $(B43_PACKAGES) $(USB2_PACKAGES)
 endef
@@ -1003,18 +1030,17 @@ endef
 TARGET_DEVICES += GW6200
 
 ### Telsey ###
-define Device/CVPA502PLUS
+define Device/CPVA502PLUS
   $(Device/bcm63xx)
-  IMAGES :=
   DEVICE_TITLE := Telsey CPVA502+
   DEVICE_DTS := cpva502plus
   CFE_BOARD_ID := CPVA502+
   CFE_CHIP_ID := 6348
-  CFE_EXTRAS += --signature "Telsey Tlc" --signature2 "99.99.999" --second-image-flag "0"
+  CFE_EXTRAS += --signature "Telsey Tlc" --signature2 "99.99.999"
   DEVICE_PACKAGES := \
     $(B43_PACKAGES)
 endef
-TARGET_DEVICES += CVPA502PLUS
+TARGET_DEVICES += CPVA502PLUS
 
 define Device/CPA-ZNTE60T
   $(Device/bcm63xx)

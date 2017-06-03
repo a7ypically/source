@@ -22,7 +22,8 @@ define Image/Build/Initramfs
 	$(call Image/Build/Profile/$(PROFILE),initramfs)
 endef
 
-DEVICE_VARS += DTS IMAGE_SIZE
+DEVICE_VARS += DTS IMAGE_SIZE NETGEAR_BOARD_ID NETGEAR_HW_ID
+DEVICE_VARS += BUFFALO_TAG_PLATFORM BUFFALO_TAG_VERSION BUFFALO_TAG_MINOR
 
 loadaddr-y := 0x80000000
 loadaddr-$(CONFIG_TARGET_ramips_rt288x) := 0x88000000
@@ -35,6 +36,7 @@ define Device/Default
   PROFILES = Default $$(DTS)
   KERNEL_DEPENDS = $$(wildcard ../dts/$$(DTS).dts)
   KERNEL := $(KERNEL_DTB) | uImage lzma
+  DEVICE_DTS_DIR := ../dts
   IMAGES := sysupgrade.bin
   IMAGE_SIZE := $(ralink_default_fw_size_8M)
   SUPPORTED_DEVICES = $(1)
@@ -48,7 +50,7 @@ define Build/patch-dtb
 endef
 
 define Build/trx
-	$(STAGING_DIR_HOST)/bin/trx \
+	$(STAGING_DIR_HOST)/bin/trx $(1) \
 		-o $@ \
 		-m $(IMAGE_SIZE) \
 		-f $(IMAGE_KERNEL) \
@@ -83,6 +85,11 @@ endef
 define Build/edimax-header
 	$(STAGING_DIR_HOST)/bin/mkedimaximg -i $@ -o $@.new $(1)
 	@mv $@.new $@
+endef
+
+define Build/poray-header
+	$(STAGING_DIR_HOST)/bin/mkporayfw $(1) -f $@ -o $@.new
+	mv $@.new $@
 endef
 
 define Build/senao-header
@@ -179,63 +186,9 @@ ralink_default_fw_size_4M=3866624
 BuildFirmware/Default4M/squashfs=$(call BuildFirmware/OF,$(1),$(2),$(3),$(ralink_default_fw_size_4M),$(4))
 BuildFirmware/Default4M/initramfs=$(call BuildFirmware/OF/initramfs,$(1),$(2),$(3),$(4))
 
-# Build images for default ralink layout for 8MB flash
-# kernel + roots = 0x7b0000
-# $(1) = squashfs/initramfs
-# $(2) = lowercase board name
-# $(3) = dts file
-# $(4) = uImage header name field
 ralink_default_fw_size_8M=8060928
-BuildFirmware/Default8M/squashfs=$(call BuildFirmware/OF,$(1),$(2),$(3),$(ralink_default_fw_size_8M),$(4))
-BuildFirmware/Default8M/initramfs=$(call BuildFirmware/OF/initramfs,$(1),$(2),$(3),$(4))
-
 ralink_default_fw_size_16M=16121856
-BuildFirmware/Default16M/squashfs=$(call BuildFirmware/OF,$(1),$(2),$(3),$(ralink_default_fw_size_16M),$(4))
-BuildFirmware/Default16M/initramfs=$(call BuildFirmware/OF/initramfs,$(1),$(2),$(3),$(4))
-
 ralink_default_fw_size_32M=33226752
-BuildFirmware/Default32M/squashfs=$(call BuildFirmware/OF,$(1),$(2),$(3),$(ralink_default_fw_size_32M),$(4))
-BuildFirmware/Default32M/initramfs=$(call BuildFirmware/OF/initramfs,$(1),$(2),$(3),$(4))
-
-# Build images for a custom sized flash layout
-# $(1) = squashfs/initramfs
-# $(2) = lowercase board name
-# $(3) = dts file
-# $(4) = kernel + rootfs size
-BuildFirmware/CustomFlash/squashfs=$(call BuildFirmware/OF,$(1),$(2),$(3),$(4),$(5),$(6))
-BuildFirmware/CustomFlash/initramfs=$(call BuildFirmware/OF/initramfs,$(1),$(2),$(3))
-
-# Some boards need a special header inside the uImage to make them bootable
-define BuildFirmware/CustomFlashFactory/squashfs
-	$(call BuildFirmware/CustomFlash/$(1),$(1),$(2),$(3),$(4))
-	$(call BuildFirmware/CustomFlash/$(1),$(1),$(2),$(3),$(4),$(5),$(6))
-endef
-BuildFirmware/CustomFlashFactory/initramfs=$(call BuildFirmware/OF/initramfs,$(1),$(2),$(3))
-
-# wrappers for boards that have 4MB and 8MB versions
-define BuildFirmware/DefaultDualSize/squashfs
-	$(call BuildFirmware/Default4M/$(1),$(1),$(2)-4M,$(3)-4M)
-	$(call BuildFirmware/Default8M/$(1),$(1),$(2)-8M,$(3)-8M)
-endef
-define BuildFirmware/DefaultDualSize/initramfs
-	$(call BuildFirmware/OF/initramfs,$(1),$(2)-4M,$(3)-4M)
-	$(call BuildFirmware/OF/initramfs,$(1),$(2)-8M,$(3)-8M)
-endef
-
-define BuildFirmware/PorayDualSize/squashfs
-	$(call BuildFirmware/DefaultDualSize/$(1),$(1),$(2),$(3))
-	if [ -e "$(call sysupname,$(1),$(2)-4M)" ]; then \
-		mkporayfw -B $(3) -F 4M \
-			-f $(call sysupname,$(1),$(2)-4M) \
-			-o $(call imgname,$(1),$(2)-4M)-factory.bin; \
-	fi
-	if [ -e "$(call sysupname,$(1),$(2)-8M)" ]; then \
-		mkporayfw -B $(3) -F 8M \
-			-f $(call sysupname,$(1),$(2)-8M) \
-			-o $(call imgname,$(1),$(2)-8M)-factory.bin; \
-	fi
-endef
-BuildFirmware/PorayDualSize/initramfs=$(call BuildFirmware/DefaultDualSize/initramfs,$(1),$(2),$(3))
 
 
 ifeq ($(SUBTARGET),rt288x)

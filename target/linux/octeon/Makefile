@@ -9,11 +9,11 @@ include $(TOPDIR)/rules.mk
 ARCH:=mips64
 BOARD:=octeon
 BOARDNAME:=Cavium Networks Octeon
-FEATURES:=squashfs ext4 ramdisk pci usb
+FEATURES:=squashfs ramdisk pci usb
 CPU_TYPE:=octeon
 MAINTAINER:=John Crispin <john@phrozen.org>
 
-KERNEL_PATCHVER:=4.4
+KERNEL_PATCHVER:=4.9
 
 define Target/Description
 	Build firmware images for Cavium Networks Octeon-based boards.

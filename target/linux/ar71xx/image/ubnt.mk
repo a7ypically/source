@@ -6,7 +6,7 @@
 # routerboard creates partitions out of the ubnt header
 define Build/mkubntimage
 	-$(STAGING_DIR_HOST)/bin/mkfwimage \
-		-B $(UBNT_BOARD) -v $(UBNT_TYPE).$(UBNT_CHIP).v6.0.0-OpenWrt-$(REVISION) \
+		-B $(UBNT_BOARD) -v $(UBNT_TYPE).$(UBNT_CHIP).v6.0.0-$(VERSION_DIST)-$(REVISION) \
 		-k $(IMAGE_KERNEL) \
 		-r $@ \
 		-o $@
@@ -19,7 +19,7 @@ define Build/mkubntimage-split
 	dd if=$@ of=$@.old1 bs=1024k count=1; \
 	dd if=$@ of=$@.old2 bs=1024k skip=1; \
 	$(STAGING_DIR_HOST)/bin/mkfwimage \
-		-B $(UBNT_BOARD) -v $(UBNT_TYPE).$(UBNT_CHIP).v6.0.0-OpenWrt-$(REVISION) \
+		-B $(UBNT_BOARD) -v $(UBNT_TYPE).$(UBNT_CHIP).v6.0.0-$(VERSION_DIST)-$(REVISION) \
 		-k $@.old1 \
 		-r $@.old2 \
 		-o $@; \
@@ -28,7 +28,7 @@ endef
 
 define Build/mkubntimage2
 	-$(STAGING_DIR_HOST)/bin/mkfwimage2 -f 0x9f000000 \
-		-v $(UBNT_TYPE).$(UBNT_CHIP).v6.0.0-OpenWrt-$(REVISION) \
+		-v $(UBNT_TYPE).$(UBNT_CHIP).v6.0.0-$(VERSION_DIST)-$(REVISION) \
 		-p jffs2:0x50000:0xf60000:0:0:$@ \
 		-o $@.new
 	@mv $@.new $@
@@ -133,6 +133,11 @@ define Device/ubnt-unifiac-lite
   BOARDNAME := UBNT-UF-AC-LITE
 endef
 
+define Device/ubnt-unifiac-mesh
+  $(Device/ubnt-unifiac-lite)
+  DEVICE_TITLE := Ubiquiti UniFi AC-Mesh
+endef
+
 define Device/ubnt-unifiac-pro
   $(Device/ubnt-unifiac)
   DEVICE_TITLE := Ubiquiti UniFi AC-Pro
@@ -147,7 +152,7 @@ define Device/ubnt-unifi-outdoor
   BOARDNAME := UBNT-U20
   DEVICE_PROFILE := UBNT UBNTUNIFIOUTDOOR
 endef
-TARGET_DEVICES += ubnt-unifi ubnt-unifiac-lite ubnt-unifiac-pro ubnt-unifi-outdoor
+TARGET_DEVICES += ubnt-unifi ubnt-unifiac-lite ubnt-unifiac-mesh ubnt-unifiac-pro ubnt-unifi-outdoor
 
 define Device/ubnt-nano-m-xw
   $(Device/ubnt-xw)
@@ -193,7 +198,6 @@ define Device/ubnt-air-gateway-pro
   BOARDNAME := UBNT-AGWP
   UBNT_TYPE := AirGWP
   UBNT_CHIP := ar934x
-  CONSOLE = ttyS0,115200
 endef
 TARGET_DEVICES += ubnt-air-gateway-pro
 
@@ -220,30 +224,30 @@ define Device/ubnt-routerstation
 endef
 
 define Device/ubnt-rs
-$(Device/ubnt-routerstation)
+  $(Device/ubnt-routerstation)
   DEVICE_TITLE := Ubiquiti RouterStation
   BOARDNAME := UBNT-RS
-  DEVICE_PROFILE := Madwifi UBNT UBNTRS
+  DEVICE_PROFILE := UBNT UBNTRS
   UBNT_BOARD := RS
   UBNT_TYPE := RSx
   UBNT_CHIP := ar7100
 endef
 
 define Device/ubnt-rspro
-$(Device/ubnt-routerstation)
+  $(Device/ubnt-routerstation)
   DEVICE_TITLE := Ubiquiti RouterStation Pro
   BOARDNAME := UBNT-RSPRO
-  DEVICE_PROFILE := Madwifi UBNT UBNTRSPRO
+  DEVICE_PROFILE := UBNT UBNTRSPRO
   UBNT_BOARD := RSPRO
   UBNT_TYPE := RSPRO
   UBNT_CHIP := ar7100pro
 endef
 
 define Device/ubnt-ls-sr71
-$(Device/ubnt-routerstation)
+  $(Device/ubnt-routerstation)
   DEVICE_TITLE := Ubiquiti LS-SR71
   BOARDNAME := UBNT-LS-SR71
-  DEVICE_PROFILE := Madwifi UBNT
+  DEVICE_PROFILE := UBNT
   UBNT_BOARD := LS-SR71
   UBNT_TYPE := LS-SR71
   UBNT_CHIP := ar7100
@@ -267,7 +271,7 @@ define Device/ubnt-uap-pro
 endef
 
 define Device/ubnt-unifi-outdoor-plus
-$(Device/ubnt-uap-pro)
+  $(Device/ubnt-uap-pro)
   DEVICE_TITLE := Ubiquiti UniFi Outdoor Plus
   UBNT_CHIP := ar7240
   BOARDNAME := UBNT-UOP

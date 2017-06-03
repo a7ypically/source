@@ -6,88 +6,46 @@
 #
 
 include $(TOPDIR)/rules.mk
-include $(INCLUDE_DIR)/image.mk
 
 PKG_NAME:=uboot-layerscape-32bit
 PKG_VERSION:=v1.0
 PKG_RELEASE:=1
 
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
+PKG_MIRROR_HASH:=a29edbeddde4b3007ac349c2a5ee434719049ac4753e459dbb1bab21e1c585da
 PKG_SOURCE_URL:=https://github.com/fsl-jyt/uboot-ls-32b.git
-PKG_SOURCE_VERSION:=719f8b606334bc73367f78c204dce69786963b65
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE_VERSION:=6476195551ea83193afd06d0c441483c04729c8d
 
 PKG_LICENSE:=GPL-2.0 GPL-2.0+
 PKG_LICENSE_FILES:=Licenses/README
 
+PKG_MAINTAINER:=Jiang Yutang <jiangyutang1978@gmail.com>
+
 include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/kernel.mk
 
-define uboot/Default
-	TITLE:=
-	CONFIG:=
+define Package/uboot-layerscape-32b
+  SECTION:=boot
+  CATEGORY:=Boot Loaders
+  DEPENDS:=@TARGET_layerscape_32b
+  TITLE:=32-bit U-Boot for Layerscape boards
+  DEFAULT:=y
+  HIDDEN:=1
 endef
-
-define uboot/ls1043ardb
-	TITLE:=U-Boot binary $(PKG_NAME)-$(PKG_VERSION) for NXP ls1043ardb 32b Dev Board
-	CONFIG=ls1043ardb-uboot.bin
-endef
-
-define uboot/ls1012ardb
-	TITLE:=U-Boot binary $(PKG_NAME)-$(PKG_VERSION) for NXP ls1012ardb 32b Dev Board
-	CONFIG=ls1012ardb-uboot.bin.swap
-endef
-
-UBOOTS := \
-	ls1043ardb \
-	ls1012ardb
-
-define Package/uboot/template
-define Package/uboot-layerscape-32b-$(1)
-	SECTION:=boot
-	CATEGORY:=Boot Loaders
-	DEPENDS:= @TARGET_layerscape_32b
-	TITLE:=$(2)
-	URL:=https://github.com/fsl-jyt/uboot-ls-32b.git
-	VARIANT:=$(1)
-	MAINTAINER:=Jiang Yutang <jiangyutang1978@gmail.com>
-endef
-endef
-
-define BuildUBootPackage
-	$(eval $(uboot/Default))
-	$(eval $(uboot/$(1)))
-	$(call Package/uboot/template,$(1),$(TITLE))
-endef
-
-ifdef BUILD_VARIANT
-$(eval $(call uboot/$(BUILD_VARIANT)))
-UBOOT_CONFIG:=$(if $(CONFIG),$(CONFIG),$(BUILD_VARIANT))
-endif
 
 define Build/Configure
+
 endef
 
 define Build/Compile
+
 endef
 
-define Package/uboot/install/default
-	$(CP) $(PKG_BUILD_DIR)/$(UBOOT_CONFIG) $(KDIR)/$(1)-32b-uboot.bin
+define Build/InstallDev
+	$(INSTALL_DIR) $(STAGING_DIR_IMAGE)
+	$(CP) $(PKG_BUILD_DIR)/ls1043ardb-uboot.bin $(STAGING_DIR_IMAGE)/ls1043ardb-32b-uboot.bin
+	$(CP) $(PKG_BUILD_DIR)/ls1046ardb-uboot.bin $(STAGING_DIR_IMAGE)/ls1046ardb-32b-uboot.bin
+	$(CP) $(PKG_BUILD_DIR)/ls1012ardb-uboot.bin.swap $(STAGING_DIR_IMAGE)/ls1012ardb-32b-uboot.bin
 endef
 
-define Package/uboot/install/template
-define Package/uboot-layerscape-32b-$(1)/install
-	$(call Package/uboot/install/default,$(2))
-endef
-endef
-
-$(foreach u,$(UBOOTS), \
-	$(eval $(call Package/uboot/install/template,$(u),$(u))) \
-)
-
-$(foreach u,$(UBOOTS), \
-	$(eval $(call BuildUBootPackage,$(u))) \
-	$(eval $(call BuildPackage,uboot-layerscape-32b-$(u))) \
-)
+$(eval $(call BuildPackage,uboot-layerscape-32b))

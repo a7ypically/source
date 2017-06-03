@@ -1,6 +1,6 @@
 #
 # Copyright (C) 2010-2014 OpenWrt.org
-# Copyright (C) 2016 Luiz Angelo Daros de Luca <luizluca@gmail.com>
+# Copyright (C) 2016-2017 Luiz Angelo Daros de Luca <luizluca@gmail.com>
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=elfutils
-PKG_VERSION:=0.167
+PKG_VERSION:=0.169
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://fedorahosted.org/releases/e/l/$(PKG_NAME)/$(PKG_VERSION)
-PKG_MD5SUM:=efc6c2067dfad5646777e93e85222e8f
+PKG_SOURCE_URL:=https://sourceware.org/$(PKG_NAME)/ftp/$(PKG_VERSION)
+PKG_HASH:=9412fac7b30872b738bc1ed1ebcaed54493c26ef9a67887913498c17b10f3bc2
 PKG_MAINTAINER:=Luiz Angelo Daros de Luca <luizluca@gmail.com>
 PKG_LICENSE:=GPL-3.0+
 PKG_LICENSE_FILES:=COPYING COPYING-GPLV2 COPYING-LGPLV3
@@ -67,6 +67,8 @@ endif
 
 CONFIGURE_ARGS += \
 	--without-lzma
+
+TARGET_CFLAGS += -D_GNU_SOURCE -Wno-unused-result
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include

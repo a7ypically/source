@@ -230,6 +230,11 @@ default_postinst() {
 		ret=$?
 	fi
 
+	if [ -d "$root/rootfs-overlay" ]; then
+		cp -R $root/rootfs-overlay/. $root/
+		rm -fR $root/rootfs-overlay/
+	fi
+
 	if [ -z "$root" ] && grep -q -s "^/etc/uci-defaults/" "/usr/lib/opkg/info/${pkgname}.list"; then
 		. /lib/functions/system.sh
 		[ -d /tmp/.uci ] || mkdir -p /tmp/.uci
@@ -346,6 +351,10 @@ user_add() {
 
 user_exists() {
 	grep -qs "^${1}:" ${IPKG_INSTROOT}/etc/passwd
+}
+
+board_name() {
+	[ -e /tmp/sysinfo/board_name ] && cat /tmp/sysinfo/board_name || echo "generic"
 }
 
 [ -z "$IPKG_INSTROOT" -a -f /lib/config/uci.sh ] && . /lib/config/uci.sh

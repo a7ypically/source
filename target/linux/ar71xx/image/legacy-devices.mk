@@ -1,3 +1,10 @@
+define LegacyDevice/A60
+   DEVICE_TITLE := OpenMesh A40/A60
+   DEVICE_PACKAGES := om-watchdog kmod-ath10k ath10k-firmware-qca988x \
+	mod-usb-core kmod-usb2
+endef
+LEGACY_DEVICES += A60
+
 define LegacyDevice/ALFANX
   DEVICE_TITLE := ALFA Network N2/N5 board
 endef
@@ -13,19 +20,6 @@ define LegacyDevice/TUBE2H8M
   DEVICE_TITLE := ALFA Network Tube2H board (8MB flash)
 endef
 LEGACY_DEVICES += TUBE2H8M
-
-define LegacyDevice/AP81
-  DEVICE_TITLE := Atheros AP81 reference board
-  DEVICE_PACKAGES := kmod-usb-core kmod-usb2
-endef
-LEGACY_DEVICES += AP81
-
-define LegacyDevice/AP83
-  DEVICE_TITLE := Atheros AP83 reference board
-  DEVICE_PACKAGES := kmod-usb-core kmod-usb2 \
-	  vsc7385-ucode-ap83 vsc7395-ucode-ap83
-endef
-LEGACY_DEVICES += AP83
 
 define LegacyDevice/AP96
   DEVICE_TITLE := Atheros AP96 reference board
@@ -173,31 +167,6 @@ define LegacyDevice/WLR8100
 endef
 LEGACY_DEVICES += WLR8100
 
-define LegacyDevice/WPJ342_16M
-  DEVICE_TITLE := Compex WPJ342 (16MB flash)
-endef
-LEGACY_DEVICES += WPJ342_16M
-
-define LegacyDevice/WPJ344_16M
-  DEVICE_TITLE := Compex WPJ344 (16MB flash)
-endef
-LEGACY_DEVICES += WPJ344_16M
-
-define LegacyDevice/DR344
-  DEVICE_TITLE := Wallys DR344
-endef
-LEGACY_DEVICES += DR344
-
-define LegacyDevice/WPJ531_16M
-  DEVICE_TITLE := Compex WPJ531 (16MB flash)
-endef
-LEGACY_DEVICES += WPJ531_16M
-
-define LegacyDevice/WPJ558_16M
-  DEVICE_TITLE := Compex WPJ558 (16MB flash)
-endef
-LEGACY_DEVICES += WPJ558_16M
-
 define LegacyDevice/WRTNODE2Q
   DEVICE_TITLE := WRTnode2Q board
   DEVICE_PACKAGES := kmod-usb-core kmod-usb2 kmod-usb-storage
@@ -237,6 +206,11 @@ define LegacyDevice/FR54RTR
   DEVICE_TITLE := Frys FR-54RTR
 endef
 LEGACY_DEVICES += FR54RTR
+
+define LegacyDevice/EBR2310C1
+  DEVICE_TITLE := D-Link EBR-2310 rev. C1
+endef
+LEGACY_DEVICES += EBR2310C1
 
 define LegacyDevice/DIR615E1
   DEVICE_TITLE := D-Link DIR-615 rev. E1
@@ -341,7 +315,7 @@ endef
 LEGACY_DEVICES += WRT160NL
 
 define LegacyDevice/MYNETREXT
-  DEVICE_TITLE := WD My Net Wi-Fi Range Extender
+  DEVICE_TITLE := Western Digital My Net Wi-Fi Range Extender
   DEVICE_PACKAGES := rssileds
 endef
 LEGACY_DEVICES += MYNETREXT
@@ -434,6 +408,11 @@ define LegacyDevice/WPE72_16M
 endef
 LEGACY_DEVICES += WPE72_16M
 
+define LegacyDevice/WNR2000
+  DEVICE_TITLE := NETGEAR WNR2000V1
+endef
+LEGACY_DEVICES += WNR2000
+
 define LegacyDevice/WNR2000V3
   DEVICE_TITLE := NETGEAR WNR2000V3
 endef
@@ -477,7 +456,7 @@ endef
 LEGACY_DEVICES += WPN824N
 
 define LegacyDevice/OM2P
-  DEVICE_TITLE := OpenMesh OM2P/OM2Pv2/OM2P-HS/OM2P-HSv2/OM2P-HSv3/OM2P-LC
+  DEVICE_TITLE := OpenMesh OM2P/OM2P-HS/OM2P-LC
   DEVICE_PACKAGES := om-watchdog
 endef
 LEGACY_DEVICES += OM2P
@@ -489,7 +468,7 @@ endef
 LEGACY_DEVICES += OM5P
 
 define LegacyDevice/OM5PAC
-  DEVICE_TITLE := OpenMesh OM5P-AC/OM5P-ACv2
+  DEVICE_TITLE := OpenMesh OM5P-AC
   DEVICE_PACKAGES := kmod-ath10k ath10k-firmware-qca988x om-watchdog
 endef
 LEGACY_DEVICES += OM5PAC
@@ -501,14 +480,14 @@ endef
 LEGACY_DEVICES += MR600
 
 define LegacyDevice/MR900
-  DEVICE_TITLE := OpenMesh MR900/MR900v2
+  DEVICE_TITLE := OpenMesh MR900
   DEVICE_PACKAGES := om-watchdog
 endef
 LEGACY_DEVICES += MR900
 
 define LegacyDevice/MR1750
-  DEVICE_TITLE := OpenMesh MR1750/MR1750v2
-  DEVICE_PACKAGES := kmod-ath10k ath10k-firmware-qca988x
+  DEVICE_TITLE := OpenMesh MR1750
+  DEVICE_PACKAGES := om-watchdog kmod-ath10k ath10k-firmware-qca988x
 endef
 LEGACY_DEVICES += MR1750
 
@@ -631,12 +610,6 @@ define LegacyDevice/WZR450HP2
 endef
 LEGACY_DEVICES += WZR450HP2
 
-define LegacyDevice/ZBTWE1526
-  DEVICE_TITLE := Zbtlink ZBT-WE1526
-  DEVICE_PACKAGES := kmod-usb-core kmod-usb2
-endef
-LEGACY_DEVICES += ZBTWE1526
-
 define LegacyDevice/ZCN1523H28
   DEVICE_TITLE := Zcomax ZCN-1523H-2-8
 endef
@@ -648,7 +621,7 @@ endef
 LEGACY_DEVICES += ZCN1523H516
 
 define LegacyDevice/NBG_460N_550N_550NH
-  DEVICE_TITLE := Zyxel NBG 460N/550N/550NH
+  DEVICE_TITLE := ZyXEL NBG 460N/550N/550NH
   DEVICE_PACKAGES := kmod-rtc-pcf8563
 endef
 LEGACY_DEVICES += NBG_460N_550N_550NH

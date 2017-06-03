@@ -174,6 +174,13 @@
 -__BUILD_BLAST_CACHE(d, dcache, Index_Writeback_Inv_D, Hit_Writeback_Inv_D, 128, )
 -__BUILD_BLAST_CACHE(i, icache, Index_Invalidate_I, Hit_Invalidate_I, 128, )
 -__BUILD_BLAST_CACHE(s, scache, Index_Writeback_Inv_SD, Hit_Writeback_Inv_SD, 128, )
+-
+-__BUILD_BLAST_CACHE(inv_d, dcache, Index_Writeback_Inv_D, Hit_Invalidate_D, 16, )
+-__BUILD_BLAST_CACHE(inv_d, dcache, Index_Writeback_Inv_D, Hit_Invalidate_D, 32, )
+-__BUILD_BLAST_CACHE(inv_s, scache, Index_Writeback_Inv_SD, Hit_Invalidate_SD, 16, )
+-__BUILD_BLAST_CACHE(inv_s, scache, Index_Writeback_Inv_SD, Hit_Invalidate_SD, 32, )
+-__BUILD_BLAST_CACHE(inv_s, scache, Index_Writeback_Inv_SD, Hit_Invalidate_SD, 64, )
+-__BUILD_BLAST_CACHE(inv_s, scache, Index_Writeback_Inv_SD, Hit_Invalidate_SD, 128, )
 +__BUILD_BLAST_CACHE(d, dcache, Index_Writeback_Inv_D, Hit_Writeback_Inv_D, 16, , )
 +__BUILD_BLAST_CACHE(i, icache, Index_Invalidate_I, Hit_Invalidate_I, 16, , BCM4710_FILL_TLB(start);)
 +__BUILD_BLAST_CACHE(s, scache, Index_Writeback_Inv_SD, Hit_Writeback_Inv_SD, 16, , )
@@ -187,13 +194,7 @@
 +__BUILD_BLAST_CACHE(d, dcache, Index_Writeback_Inv_D, Hit_Writeback_Inv_D, 128, , )
 +__BUILD_BLAST_CACHE(i, icache, Index_Invalidate_I, Hit_Invalidate_I, 128, , )
 +__BUILD_BLAST_CACHE(s, scache, Index_Writeback_Inv_SD, Hit_Writeback_Inv_SD, 128, , )
- 
--__BUILD_BLAST_CACHE(inv_d, dcache, Index_Writeback_Inv_D, Hit_Invalidate_D, 16, )
--__BUILD_BLAST_CACHE(inv_d, dcache, Index_Writeback_Inv_D, Hit_Invalidate_D, 32, )
--__BUILD_BLAST_CACHE(inv_s, scache, Index_Writeback_Inv_SD, Hit_Invalidate_SD, 16, )
--__BUILD_BLAST_CACHE(inv_s, scache, Index_Writeback_Inv_SD, Hit_Invalidate_SD, 32, )
--__BUILD_BLAST_CACHE(inv_s, scache, Index_Writeback_Inv_SD, Hit_Invalidate_SD, 64, )
--__BUILD_BLAST_CACHE(inv_s, scache, Index_Writeback_Inv_SD, Hit_Invalidate_SD, 128, )
++
 +__BUILD_BLAST_CACHE(inv_d, dcache, Index_Writeback_Inv_D, Hit_Invalidate_D, 16, , )
 +__BUILD_BLAST_CACHE(inv_d, dcache, Index_Writeback_Inv_D, Hit_Invalidate_D, 32, , )
 +__BUILD_BLAST_CACHE(inv_s, scache, Index_Writeback_Inv_SD, Hit_Invalidate_SD, 16, , )
@@ -259,7 +260,7 @@
  #endif /* _ASM_R4KCACHE_H */
 --- a/arch/mips/include/asm/stackframe.h
 +++ b/arch/mips/include/asm/stackframe.h
-@@ -358,6 +358,10 @@
+@@ -365,6 +365,10 @@
  		.macro	RESTORE_SP_AND_RET
  		LONG_L	sp, PT_R29(sp)
  		.set	arch=r4000
@@ -415,7 +416,7 @@
  	/*
 --- a/arch/mips/mm/tlbex.c
 +++ b/arch/mips/mm/tlbex.c
-@@ -943,6 +943,9 @@ build_get_pgde32(u32 **p, unsigned int t
+@@ -960,6 +960,9 @@ build_get_pgde32(u32 **p, unsigned int t
  		uasm_i_srl(p, ptr, ptr, SMP_CPUID_PTRSHIFT);
  		uasm_i_addu(p, ptr, tmp, ptr);
  #else
@@ -425,7 +426,7 @@
  		UASM_i_LA_mostly(p, ptr, pgdc);
  #endif
  		uasm_i_mfc0(p, tmp, C0_BADVADDR); /* get faulting address */
-@@ -1284,6 +1287,9 @@ static void build_r4000_tlb_refill_handl
+@@ -1301,6 +1304,9 @@ static void build_r4000_tlb_refill_handl
  #ifdef CONFIG_64BIT
  		build_get_pmde64(&p, &l, &r, K0, K1); /* get pmd in K1 */
  #else
@@ -435,7 +436,7 @@
  		build_get_pgde32(&p, K0, K1); /* get pgd in K1 */
  #endif
  
-@@ -1295,6 +1301,9 @@ static void build_r4000_tlb_refill_handl
+@@ -1312,6 +1318,9 @@ static void build_r4000_tlb_refill_handl
  		build_update_entries(&p, K0, K1);
  		build_tlb_write_entry(&p, &l, &r, tlb_random);
  		uasm_l_leave(&l, p);
@@ -445,7 +446,7 @@
  		uasm_i_eret(&p); /* return from trap */
  	}
  #ifdef CONFIG_MIPS_HUGE_TLB_SUPPORT
-@@ -1871,6 +1880,9 @@ build_r4000_tlbchange_handler_head(u32 *
+@@ -1888,6 +1897,9 @@ build_r4000_tlbchange_handler_head(u32 *
  #ifdef CONFIG_64BIT
  	build_get_pmde64(p, l, r, wr.r1, wr.r2); /* get pmd in ptr */
  #else
@@ -455,7 +456,7 @@
  	build_get_pgde32(p, wr.r1, wr.r2); /* get pgd in ptr */
  #endif
  
-@@ -1917,6 +1929,9 @@ build_r4000_tlbchange_handler_tail(u32 *
+@@ -1934,6 +1946,9 @@ build_r4000_tlbchange_handler_tail(u32 *
  	build_tlb_write_entry(p, l, r, tlb_indexed);
  	uasm_l_leave(l, *p);
  	build_restore_work_registers(p);

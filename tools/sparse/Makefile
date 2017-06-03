@@ -5,14 +5,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sparse
-PKG_VERSION:=0.5-git40791b94
 
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE_URL:=git://git.kernel.org/pub/scm/devel/sparse/sparse.git
-PKG_SOURCE_VERSION:=40791b94c56b1a6da2a0ddeb1f9d5c9d64de8f93
-PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
+PKG_SOURCE_URL:=https://git.kernel.org/pub/scm/devel/sparse/sparse.git
+PKG_SOURCE_DATE:=2017-03-31
+PKG_SOURCE_VERSION:=14964df5373292af78b29529d4fc7e1a26b67a97
+PKG_MIRROR_HASH:=90110e8a4d7db099ea79dd3b99a12135e24580d81b8662bd9a86e9f81bce9df7
 
 PKG_BUILD_PARALLEL:=1
 

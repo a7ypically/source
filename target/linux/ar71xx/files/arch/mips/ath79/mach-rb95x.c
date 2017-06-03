@@ -53,7 +53,7 @@ static struct mtd_partition rb95x_nand_partitions[] = {
 		.size	= (4 * 1024 * 1024) - (256 * 1024),
 	},
 	{
-		.name	= "rootfs",
+		.name	= "ubi",
 		.offset	= MTDPART_OFS_NXTBLK,
 		.size	= MTDPART_SIZ_FULL,
 	},
@@ -164,6 +164,8 @@ static int rb95x_nand_scan_fixup(struct mtd_info *mtd)
 		 */
 		chip->ecc.layout = &rb95x_nand_ecclayout;
 	}
+
+	chip->options = NAND_NO_SUBPAGE_WRITE;
 
 	return 0;
 }

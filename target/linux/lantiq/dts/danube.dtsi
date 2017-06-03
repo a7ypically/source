@@ -5,8 +5,12 @@
 	#size-cells = <1>;
 	compatible = "lantiq,xway", "lantiq,danube";
 
+	aliases {
+		serial0 = &asc1;
+	};
+
 	chosen {
-		bootargs = "console=ttyLTQ0,115200 init=/etc/preinit";
+		stdout-path = "serial0:115200n8";
 	};
 
 	cpus {
@@ -139,7 +143,7 @@
 		};
 
 		ifxhcd@E101000 {
-			compatible = "lantiq,ifxhcd-danube-dwc2", "lantiq,ifxhcd-danube";
+			compatible = "lantiq,danube-usb", "lantiq,ifxhcd-danube";
 			reg = <0xE101000 0x1000
 				0xE120000 0x3f000>;
 			interrupt-parent = <&icu0>;

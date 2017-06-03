@@ -6,7 +6,7 @@
 
 / {
 	compatible = "ASL26555", "ralink,rt3050-soc";
-	model = "Alpha ASL26555";
+	model = "Alpha ASL26555 (16M)";
 
 	gpio-keys-polled {
 		compatible = "gpio-keys-polled";
@@ -84,7 +84,6 @@
 		#size-cells = <1>;
 		compatible = "jedec,spi-nor";
 		reg = <0>;
-		linux,modalias = "m25p80", "s25sl12801";
 		spi-max-frequency = <10000000>;
 
 		partition@0 {

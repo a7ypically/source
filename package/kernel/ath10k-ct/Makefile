@@ -1,7 +1,6 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ath10k-ct
-PKG_VERSION:=2016-11-16
 PKG_RELEASE=1
 
 PKG_LICENSE:=GPLv2
@@ -9,9 +8,9 @@ PKG_LICENSE_FILES:=
 
 PKG_SOURCE_URL:=https://github.com/greearb/ath10k-ct.git
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE_VERSION:=2422547eb94ac3d88f03f67f95069d7029e72c28
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-$(PKG_SOURCE_VERSION).tar.xz
+PKG_SOURCE_DATE:=2017-05-16
+PKG_SOURCE_VERSION:=c048ef0c3eedf99b41bc12b3f4e47ef3d9fab484
+PKG_MIRROR_HASH:=7936293962a10a0da7469759623013fc151019a6a584cfc6416bc0b605bd74d7
 
 PKG_MAINTAINER:=Ben Greear <greearb@candelatech.com>
 PKG_BUILD_PARALLEL:=1
@@ -24,7 +23,7 @@ include $(INCLUDE_DIR)/package.mk
 define KernelPackage/ath10k-ct
   SUBMENU:=Wireless Drivers
   TITLE:=ath10k-ct driver optimized for CT ath10k firmware
-  DEPENDS:=+kmod-mac80211 +kmod-ath +@DRIVER_11N_SUPPORT @PCI_SUPPORT +@KERNEL_RELAY
+  DEPENDS:=+kmod-mac80211 +kmod-ath +@DRIVER_11N_SUPPORT +@DRIVER_11AC_SUPPORT @PCI_SUPPORT +@KERNEL_RELAY +kmod-hwmon-core
   FILES:=\
 	$(PKG_BUILD_DIR)/ath10k/ath10k_pci.ko \
 	$(PKG_BUILD_DIR)/ath10k/ath10k_core.ko
@@ -58,6 +57,10 @@ endif
 
 ifdef CONFIG_PACKAGE_ATH_DEBUG
   NOSTDINC_FLAGS += -DCONFIG_ATH10K_DEBUG
+endif
+
+ifdef CONFIG_PACKAGE_ATH_DFS
+  NOSTDINC_FLAGS += -DCONFIG_ATH10K_DFS_CERTIFIED
 endif
 
 define Build/Configure

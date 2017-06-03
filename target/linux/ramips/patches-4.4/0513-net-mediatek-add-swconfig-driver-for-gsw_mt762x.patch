@@ -51,7 +51,7 @@ Signed-off-by: John Crispin <blogic@openwrt.org>
  #define GSW_REG_PORT_PMCR(x)	(0x3000 + (x * 0x100))
  #define GSW_REG_PORT_STATUS(x)	(0x3008 + (x * 0x100))
  #define GSW_REG_SMACCR0		0x3fE4
-@@ -76,6 +78,7 @@
+@@ -82,6 +84,7 @@
  #define PHY_PRE_EN		BIT(30)
  #define PMY_MDC_CONF(_x)	((_x & 0x3f) << 24)
  
@@ -61,7 +61,7 @@ Signed-off-by: John Crispin <blogic@openwrt.org>
  	GSW_ATTR_ENABLE_VLAN,
 --- /dev/null
 +++ b/drivers/net/ethernet/mediatek/mt7530.c
-@@ -0,0 +1,884 @@
+@@ -0,0 +1,890 @@
 +/*
 + * This program is free software; you can redistribute it and/or
 + * modify it under the terms of the GNU General Public License
@@ -100,7 +100,11 @@ Signed-off-by: John Crispin <blogic@openwrt.org>
 +
 +#define MT7530_CPU_PORT		6
 +#define MT7530_NUM_PORTS	8
++#ifdef CONFIG_SOC_MT7621
++#define MT7530_NUM_VLANS	4095
++#else
 +#define MT7530_NUM_VLANS	16
++#endif
 +#define MT7530_MAX_VID		4095
 +#define MT7530_MIN_VID		0
 +
@@ -555,7 +559,9 @@ Signed-off-by: John Crispin <blogic@openwrt.org>
 +
 +	if (!priv->global_vlan_enable) {
 +		for (i = 0; i < MT7530_NUM_PORTS; i++)
-+			mt7530_w32(priv, REG_ESW_PORT_PCR(i), 0x00ff0000);
++			mt7530_w32(priv, REG_ESW_PORT_PCR(i), 0x00400000);
++
++		mt7530_w32(priv, REG_ESW_PORT_PCR(MT7530_CPU_PORT), 0x00ff0000);
 +
 +		for (i = 0; i < MT7530_NUM_PORTS; i++)
 +			mt7530_w32(priv, REG_ESW_PORT_PVC(i), 0x810000c0);

@@ -4,7 +4,6 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-include $(INCLUDE_DIR)/host.mk
 include $(INCLUDE_DIR)/prereq.mk
 include $(INCLUDE_DIR)/depends.mk
 
@@ -43,7 +42,25 @@ endef
 define Download/kernel
   URL:=$(LINUX_SITE)
   FILE:=$(LINUX_SOURCE)
-  MD5SUM:=$(LINUX_KERNEL_MD5SUM)
+  HASH:=$(LINUX_KERNEL_HASH)
+endef
+
+KERNEL_GIT_OPTS:=
+ifneq ($(strip $(CONFIG_KERNEL_GIT_LOCAL_REPOSITORY)),"")
+  KERNEL_GIT_OPTS+=--reference $(CONFIG_KERNEL_GIT_LOCAL_REPOSITORY)
+endif
+
+ifneq ($(strip $(CONFIG_KERNEL_GIT_BRANCH)),"")
+  KERNEL_GIT_OPTS+=--branch $(CONFIG_KERNEL_GIT_BRANCH)
+endif
+
+define Download/git-kernel
+  URL:=$(call qstrip,$(CONFIG_KERNEL_GIT_CLONE_URI))
+  PROTO:=git
+  VERSION:=$(CONFIG_KERNEL_GIT_BRANCH)
+  FILE:=$(LINUX_SOURCE)
+  SUBDIR:=linux-$(LINUX_VERSION)
+  OPTS:=$(KERNEL_GIT_OPTS)
 endef
 
 ifdef CONFIG_COLLECT_KERNEL_DEBUG
@@ -73,6 +90,7 @@ endif
 define BuildKernel
   $(if $(QUILT),$(Build/Quilt))
   $(if $(LINUX_SITE),$(call Download,kernel))
+  $(if $(call qstrip,$(CONFIG_KERNEL_GIT_CLONE_URI)),$(call Download,git-kernel))
 
   .NOTPARALLEL:
 
@@ -133,7 +151,7 @@ define BuildKernel
   endef
 
   download: $(if $(LINUX_SITE),$(DL_DIR)/$(LINUX_SOURCE))
-  prepare: $(STAMP_CONFIGURED)
+  prepare: $(STAMP_PREPARED)
   compile: $(LINUX_DIR)/.modules
 	$(MAKE) -C image compile TARGET_BUILD=
 

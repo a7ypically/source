@@ -25,13 +25,22 @@ gre_generic_setup() {
 	json_add_string mode "$mode"
 	json_add_int mtu "${mtu:-1280}"
 	[ -n "$df" ] && json_add_boolean df "$df"
-	json_add_int ttl "${ttl:-64}"
+	[ -n "ttl" ] && json_add_int ttl "$ttl"
 	[ -n "$tos" ] && json_add_string tos "$tos"
 	json_add_boolean multicast "$multicast"
 	json_add_string local "$local"
 	json_add_string remote "$remote"
 	[ -n "$tunlink" ] && json_add_string link "$tunlink"
-	json_add_string info "${ikey:-0},${okey:-0},${icsum:-0},${ocsum:-0},${iseqno:-0},${oseqno:-0}"
+
+	json_add_object 'data'
+	[ -n "$ikey" ] && json_add_int ikey "$ikey"
+	[ -n "$okey" ] && json_add_int okey "$okey"
+	[ -n "$icsum" ] && json_add_boolean icsum "$icsum"
+	[ -n "$ocsum" ] && json_add_boolean ocsum "$ocsum"
+	[ -n "$iseqno" ] && json_add_boolean iseqno "$iseqno"
+	[ -n "$oseqno" ] && json_add_boolean oseqno "$oseqno"
+	json_close_object
+
 	proto_close_tunnel
 
 	proto_add_data
@@ -84,7 +93,14 @@ gre_setup() {
 
 	[ -z "$df" ] && df="1"
 
-	gre_generic_setup $cfg $mode $ipaddr $peeraddr "gre-$cfg"
+	case "$mode" in
+		gretapip)
+			gre_generic_setup $cfg $mode $ipaddr $peeraddr "gre4t-$cfg"
+			;;
+		*)
+			gre_generic_setup $cfg $mode $ipaddr $peeraddr "gre4-$cfg"
+			;;
+	esac
 }
 
 proto_gre_setup() {
@@ -102,7 +118,7 @@ proto_gretap_setup() {
 	gre_setup $cfg "gretapip"
 
 	json_init
-	json_add_string name "gre-$cfg"
+	json_add_string name "gre4t-$cfg"
 	json_add_boolean link-ext 0
 	json_close_object
 
@@ -155,7 +171,14 @@ grev6_setup() {
 		fi
 	}
 
-	gre_generic_setup $cfg $mode $ip6addr $peer6addr "grev6-$cfg"
+	case "$mode" in
+		gretapip6)
+			gre_generic_setup $cfg $mode $ip6addr $peer6addr "gre6t-$cfg"
+			;;
+		*)
+			gre_generic_setup $cfg $mode $ip6addr $peer6addr "gre6-$cfg"
+			;;
+	esac
 }
 
 proto_grev6_setup() {
@@ -173,7 +196,7 @@ proto_grev6tap_setup() {
 	grev6_setup $cfg "gretapip6"
 
 	json_init
-	json_add_string name "grev6-$cfg"
+	json_add_string name "gre6t-$cfg"
 	json_add_boolean link-ext 0
 	json_close_object
 
@@ -203,7 +226,7 @@ proto_gre_teardown() {
 proto_gretap_teardown() {
 	local cfg="$1"
 
-	gretap_generic_teardown "gre-$cfg"
+	gretap_generic_teardown "gre4t-$cfg"
 }
 
 proto_grev6_teardown() {
@@ -213,7 +236,7 @@ proto_grev6_teardown() {
 proto_grev6tap_teardown() {
 	local cfg="$1"
 
-	gretap_generic_teardown "grev6-$cfg"
+	gretap_generic_teardown "gre6t-$cfg"
 }
 
 gre_generic_init_config() {

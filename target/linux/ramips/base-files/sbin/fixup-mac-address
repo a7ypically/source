@@ -1,13 +1,15 @@
 #!/bin/sh
 . /lib/functions.sh
 . /lib/functions/system.sh
+. /lib/ramips.sh
 
 partname=""
 offset=""
 NEW_MAC=
 YES=
 
-case "$(cat /tmp/sysinfo/board_name)" in
+board=$(ramips_board_name)
+case $board in
 	witi)
 		partname=factory
 		offset=$((0xe000))

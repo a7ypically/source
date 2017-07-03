@@ -1,0 +1,33 @@
+#!/bin/sh /etc/rc.common
+
+START=80
+
+USE_PROCD=1
+PROG=/usr/sbin/dnswhisperer
+
+start_instance() {
+	local cfg="$1"
+	local dns_addr blacklist filter_ipv6
+
+	config_get dns_addr "$cfg" dns_addr
+	config_get blacklist "$cfg" blacklist
+        config_get_bool filter_ipv6 "$cfg" filter_ipv6 1
+	local cmd_flags
+        [ $filter_ipv6 -eq 1 ] && cmd_flags="-6"
+
+	procd_open_instance
+	procd_set_param command ${PROG} \
+		-s "$dns_addr" -f "$blacklist" \
+		$cmd_flags
+	procd_set_param respawn
+	procd_close_instance
+}
+
+service_triggers() {
+	procd_add_reload_trigger "dnswhisperer"
+}
+
+start_service() {
+	config_load 'dnswhisperer'
+	config_foreach start_instance 'dnswhisperer'
+}

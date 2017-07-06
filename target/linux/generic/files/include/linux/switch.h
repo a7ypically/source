@@ -129,6 +129,7 @@ struct switch_dev {
 	struct switch_portmap *portmap;
 	struct switch_port_link linkbuf;
 
+	int *port_state;
 	char buf[128];
 
 #ifdef CONFIG_SWCONFIG_LEDS

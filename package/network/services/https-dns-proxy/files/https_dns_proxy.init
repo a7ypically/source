@@ -7,22 +7,20 @@ PROG=/usr/sbin/https_dns_proxy
 
 start_instance() {
 	local cfg="$1"
-	local listen_addr listen_port dns_ip mark user group
+	local listen_addr listen_port proxy user group
 
 	config_get listen_addr "$cfg" listen_addr
 	config_get listen_port "$cfg" listen_port
 	config_get user "$cfg" user
 	config_get group "$cfg" group
 
-    config_get dns_ip "$cfg" dns_ip
-    config_get mark "$cfg" mark
-    [ "$dns_ip" != "" ] && dns_ip="-i $dns_ip"
-    [ "$mark" != "" ] && mark="-m $mark"
+	config_get proxy "$cfg" proxy
+	[ "$proxy" != "" ] && proxy="-t $proxy"
 
 	procd_open_instance
 	procd_set_param command ${PROG} \
 		-a "$listen_addr" -p "$listen_port" \
-		-u "$user" -g "$group" $dns_ip $mark
+		-u "$user" -g "$group" "$proxy"
 	procd_set_param respawn
 	procd_close_instance
 }

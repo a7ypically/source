@@ -1,14 +1,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=https_dns_proxy
-PKG_VERSION:=2017-07-02
+PKG_VERSION:=2018-03-20
 PKG_RELEASE=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE_URL:=https://github.com/a7ypically/https_dns_proxy.git
+PKG_SOURCE_URL:=https://github.com/aarond10/https_dns_proxy.git
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE_VERSION:=682a2867ef3076af8c65e1014bc885c62818f80a
+PKG_SOURCE_VERSION:=843b768f0cd3aa6fa5aed4fa992776657bc18d14
 PKG_MAINTAINER:=Aaron Drew <aarond10@gmail.com>
 PKG_LICENSE:=MIT
 

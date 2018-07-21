@@ -14,13 +14,16 @@ start_instance() {
 	config_get user "$cfg" user
 	config_get group "$cfg" group
 
+	config_get log "$cfg" log
+	[ "$log" != "" ] && log="-l $log -v -v -v"
+
 	config_get proxy "$cfg" proxy
 	[ "$proxy" != "" ] && proxy="-t $proxy"
 
 	procd_open_instance
 	procd_set_param command ${PROG} \
 		-a "$listen_addr" -p "$listen_port" \
-		-u "$user" -g "$group" "$proxy"
+		-u "$user" -g "$group" $proxy $log
 	procd_set_param respawn
 	procd_close_instance
 }

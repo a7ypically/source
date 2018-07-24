@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=redsocks
-PKG_VERSION:=0.5
+PKG_VERSION:=0.66
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE_URL:=https://github.com/darkk/redsocks.git
-PKG_SOURCE_VERSION:=27b17889a43e32b0c1162514d00967e6967d41bb
+PKG_SOURCE_URL:=https://github.com/semigodking/redsocks.git
+PKG_SOURCE_VERSION:=e7ff18b55131bcb850363f85ecdc73693c0202b5
 
 PKG_MAINTAINER:=Johannes Morgenroth <jm@m-network.de>
 PKG_LICENSE:=Apache-2.0
@@ -25,7 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/redsocks
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libevent2
+  DEPENDS:=+libevent2 +libopenssl +libevent2-openssl
   TITLE:=Redirect any TCP connection to a SOCKS or HTTPS proxy server
 endef
 
@@ -49,10 +49,14 @@ endef
 
 define Package/redsocks/install
 	$(INSTALL_DIR) $(1)/usr/sbin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/redsocks $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/redsocks2 $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/etc/init.d/
 	$(INSTALL_BIN) files/redsocks.init $(1)/etc/init.d/redsocks
 	$(INSTALL_CONF) files/redsocks.conf $(1)/etc/
+endef
+
+define Build/Compile
+  $(call Build/Compile/Default,ENABLE_HTTPS_PROXY=true)
 endef
 
 $(eval $(call BuildPackage,redsocks))

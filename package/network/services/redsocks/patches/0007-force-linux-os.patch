@@ -1,0 +1,11 @@
+--- a/Makefile
++++ b/Makefile
+@@ -6,7 +6,7 @@
+ DEPS := .depend
+ OUT := redsocks2
+ VERSION := 0.66
+-OS := $(shell uname)
++OS := Linux
+
+ LIBS := -levent
+ CFLAGS +=-fPIC -O3
